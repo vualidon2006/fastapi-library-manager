@@ -1,0 +1,76 @@
+### TC01: Kiểm tra trạng thái hệ thống
+GET http://127.0.0.1:8000/health
+
+### TC02: Lấy danh sách toàn bộ sách
+GET http://127.0.0.1:8000/books
+
+### TC03: Lọc danh sách theo tác giả và giới hạn (Phân trang)
+GET http://127.0.0.1:8000/books?author=Nguyễn%20Văn%20Hùng&limit=2
+
+### TC04: Lấy chi tiết sách tồn tại (id=1)
+GET http://127.0.0.1:8000/books/1
+
+### TC05: Lấy chi tiết sách không tồn tại (id=999) -> Trả về 404
+GET http://127.0.0.1:8000/books/999
+
+### TC06: Thêm sách mới hợp lệ -> Trả về 201
+POST http://127.0.0.1:8000/books
+Content-Type: application/json
+
+{
+  "isbn": "9786040000042",
+  "title": "Phát triển Web API với FastAPI",
+  "author": "Lê Minh Tuấn",
+  "year": 2024,
+  "quantity": 4
+}
+
+### TC07: Thêm sách trùng ISBN -> Trả về 409
+POST http://127.0.0.1:8000/books
+Content-Type: application/json
+
+{
+  "isbn": "9786040000042",
+  "title": "Phát triển Web API với FastAPI trùng",
+  "author": "Lê Minh Tuấn",
+  "year": 2024,
+  "quantity": 2
+}
+
+### TC08: Thêm sách sai định dạng (năm 1800 < 1900) -> Trả về 422
+POST http://127.0.0.1:8000/books
+Content-Type: application/json
+
+{
+  "isbn": "123",
+  "title": "Sách lỗi",
+  "author": "Test Error",
+  "year": 1800,
+  "quantity": 1
+}
+
+### TC09: Cập nhật toàn bộ thông tin sách (id=1) -> Trả về 200
+PUT http://127.0.0.1:8000/books/1
+Content-Type: application/json
+
+{
+  "isbn": "9786040000011",
+  "title": "Lập trình Python nâng cao (Updated)",
+  "author": "Nguyễn Văn Hùng",
+  "year": 2023,
+  "quantity": 15
+}
+
+### TC10: Cập nhật một phần thông tin (PATCH id=1) -> Trả về 200
+PATCH http://127.0.0.1:8000/books/1
+Content-Type: application/json
+
+{
+  "quantity": 20
+}
+
+### TC11: Xóa sách (id=1) -> Trả về 204
+DELETE http://127.0.0.1:8000/books/1
+
+### TC12: Kiểm tra lại sách vừa xóa (id=1) -> Trả về 404
+GET http://127.0.0.1:8000/books/1
